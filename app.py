@@ -2,7 +2,7 @@ import json
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from flask_wtf.csrf import CSRFProtect
-from werkzeug.exceptions import CSRFError
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -39,10 +39,11 @@ def search():
     return jsonify(results)
 
 @app.route('/submit_brigade', methods=['GET', 'POST'])
-@csrf.exempt  # Temporarily disable CSRF protection for this route
+@csrf.exempt
 def submit_brigade():
     if request.method == 'POST':
         try:
+            app.logger.info(f"Received form data: {request.form}")
             new_brigade = {
                 'Name': request.form.get('name'),
                 'Alias': request.form.get('alias'),
@@ -54,15 +55,10 @@ def submit_brigade():
             with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
                 json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
             flash('Brigade submission successful!', 'success')
-            return redirect(url_for('index'))
+            return jsonify({'success': True, 'redirect': url_for('index'), 'message': 'Brigade submitted successfully'})
         except Exception as e:
             app.logger.error(f"Error submitting brigade: {str(e)}")
-            flash('An error occurred while submitting the brigade', 'error')
-            return redirect(url_for('submit_brigade'))
-    
-    # Print CSRF token value for debugging
-    csrf_token = csrf._get_token()
-    print(f"CSRF Token: {csrf_token}")
+            return jsonify({'success': False, 'message': 'An error occurred while submitting the brigade'})
     
     return render_template('submit_brigade.html')
 
@@ -146,10 +142,12 @@ def admin_logout():
     session.pop('admin', None)
     return redirect(url_for('index'))
 
-@app.errorhandler(CSRFError)
-def handle_csrf_error(e):
-    app.logger.error(f"CSRF Error: {str(e)}")
-    return render_template('csrf_error.html', reason=e.description), 400
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    if isinstance(e, werkzeug.exceptions.CSRFError):
+        app.logger.error(f"CSRF Error: {str(e)}")
+        return jsonify({'success': False, 'message': 'CSRF token is missing or invalid'}), 400
+    return e
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

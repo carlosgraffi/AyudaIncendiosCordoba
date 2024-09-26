@@ -111,4 +111,35 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('An error occurred. Please try again.');
         });
     }
+
+    // New event listener for brigade submission form
+    const brigadeForm = document.querySelector('form[action="/submit_brigade"]');
+    if (brigadeForm) {
+        brigadeForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            console.log('Form submission attempted');
+            const formData = new FormData(brigadeForm);
+            console.log('Form data:', Object.fromEntries(formData));
+            fetch(brigadeForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    }
 });
