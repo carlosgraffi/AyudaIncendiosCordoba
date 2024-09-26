@@ -18,6 +18,14 @@
     @apply bg-gray-800 text-white;
 }
 
+.dark input[type="text"] {
+    @apply bg-gray-700 text-white border-gray-600;
+}
+
+.dark button {
+    @apply bg-blue-600 hover:bg-blue-700;
+}
+
 /* Responsive styles */
 @media (max-width: 640px) {
     .brigade-card {

@@ -32,7 +32,7 @@
             }
 
             darkModeToggle.addEventListener('click', () => {
-                const isDark = !html.classList.contains('dark');
+                const isDark = html.classList.toggle('dark');
                 setDarkMode(isDark);
             });
 
