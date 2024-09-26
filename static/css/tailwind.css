@@ -8,3 +8,19 @@
 .brigade-card:hover {
     transform: scale(1.05);
 }
+
+/* Dark mode styles */
+.dark {
+    @apply bg-gray-900 text-white;
+}
+
+.dark .brigade-card {
+    @apply bg-gray-800 text-white;
+}
+
+/* Responsive styles */
+@media (max-width: 640px) {
+    .brigade-card {
+        @apply w-full;
+    }
+}
