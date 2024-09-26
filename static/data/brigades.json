@@ -1,0 +1,34 @@
+[
+    {
+        "nombre": "Bomberos Voluntarios de Córdoba Capital",
+        "ubicacion": "Córdoba Capital",
+        "contacto_principal": {
+            "plataforma": "Instagram",
+            "url": "https://www.instagram.com/bomberoscba/"
+        },
+        "donacion": {
+            "banco": "Banco de Córdoba",
+            "tipo_cuenta": "Cuenta Corriente",
+            "cbu": "0200900501000000012345",
+            "alias": "BOMBEROS.CORDOBA.CAPITAL",
+            "cuit": "30-12345678-9"
+        },
+        "fecha_actualizacion": "2023-05-15"
+    },
+    {
+        "nombre": "Bomberos Voluntarios de Villa Carlos Paz",
+        "ubicacion": "Villa Carlos Paz",
+        "contacto_principal": {
+            "plataforma": "Facebook",
+            "url": "https://www.facebook.com/BomberosVCP/"
+        },
+        "donacion": {
+            "banco": "Banco Santander",
+            "tipo_cuenta": "Caja de Ahorro",
+            "cbu": "0720000788000001234567",
+            "alias": "BOMBEROS.VILLA.CARLOS.PAZ",
+            "cuit": "30-98765432-1"
+        },
+        "fecha_actualizacion": "2023-05-10"
+    }
+]
