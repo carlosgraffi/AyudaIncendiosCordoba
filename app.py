@@ -39,27 +39,20 @@ def search():
     return jsonify(results)
 
 @app.route('/submit_brigade', methods=['GET', 'POST'])
-@csrf.exempt
 def submit_brigade():
     if request.method == 'POST':
-        try:
-            app.logger.info(f"Received form data: {request.form}")
-            new_brigade = {
-                'Name': request.form.get('name'),
-                'Alias': request.form.get('alias'),
-                'Phone Number': request.form.get('phone'),
-                'Instagram': request.form.get('instagram'),
-                'Facebook': request.form.get('facebook')
-            }
-            fire_brigades.append(new_brigade)
-            with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
-                json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
-            flash('Brigade submission successful!', 'success')
-            return jsonify({'success': True, 'redirect': url_for('index'), 'message': 'Brigade submitted successfully'})
-        except Exception as e:
-            app.logger.error(f"Error submitting brigade: {str(e)}")
-            return jsonify({'success': False, 'message': 'An error occurred while submitting the brigade'})
-    
+        new_brigade = {
+            'Name': request.form.get('name'),
+            'Alias': request.form.get('alias'),
+            'Phone Number': request.form.get('phone'),
+            'Instagram': request.form.get('instagram'),
+            'Facebook': request.form.get('facebook')
+        }
+        fire_brigades.append(new_brigade)
+        with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
+            json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
+        flash('Brigade submission successful!', 'success')
+        return redirect(url_for('index'))
     return render_template('submit_brigade.html')
 
 @app.route('/submit_event', methods=['GET', 'POST'])
@@ -102,7 +95,6 @@ def admin_dashboard():
     return render_template('admin.html', brigades=fire_brigades, pending_events=pending_events, approved_events=approved_events)
 
 @app.route('/admin/approve_event/<int:event_index>', methods=['POST'])
-@csrf.exempt
 def approve_event(event_index):
     if not session.get('admin'):
         return redirect(url_for('admin'))
@@ -120,7 +112,6 @@ def approve_event(event_index):
     return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/reject_event/<int:event_index>', methods=['POST'])
-@csrf.exempt
 def reject_event(event_index):
     if not session.get('admin'):
         return redirect(url_for('admin'))
@@ -141,13 +132,6 @@ def reject_event(event_index):
 def admin_logout():
     session.pop('admin', None)
     return redirect(url_for('index'))
-
-@app.errorhandler(HTTPException)
-def handle_exception(e):
-    if isinstance(e, werkzeug.exceptions.CSRFError):
-        app.logger.error(f"CSRF Error: {str(e)}")
-        return jsonify({'success': False, 'message': 'CSRF token is missing or invalid'}), 400
-    return e
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
