@@ -48,19 +48,4 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
     </svg>
 </button>
-
-<script>
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const html = document.documentElement;
-
-    darkModeToggle.addEventListener('click', () => {
-        html.classList.toggle('dark');
-        localStorage.setItem('darkMode', html.classList.contains('dark'));
-    });
-
-    // Check for saved dark mode preference
-    if (localStorage.getItem('darkMode') === 'true') {
-        html.classList.add('dark');
-    }
-</script>
 {% endblock %}
