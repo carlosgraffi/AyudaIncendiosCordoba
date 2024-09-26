@@ -10,6 +10,7 @@ body {
 .brigade-card {
     transition: transform 0.3s ease-in-out;
     background-color: #16213e;
+    border-left: 4px solid #4da8da;
 }
 
 .brigade-card:hover {
