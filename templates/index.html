@@ -51,34 +51,37 @@
         <h2 class="text-3xl font-bold mb-4">Eventos de Donación</h2>
         <div id="events-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {% for event in donation_events %}
-            <div class="event-card rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-bold mb-2">{{ event.name }}</h3>
-                <p class="mb-2">{{ event.description }}</p>
-                <p class="mb-2">
-                    Teléfono: 
-                    {% if event.phone_number %}
-                        <a href="https://wa.me/{{ event.phone_number|replace(' ', '') }}" target="_blank" class="hover:underline">{{ event.phone_number }}</a>
-                    {% else %}
-                        N/A
+            <div class="event-card rounded-lg shadow-md p-6 mb-4">
+                <h3 class="text-2xl font-bold mb-3 text-f9536e">{{ event.name }}</h3>
+                <p class="mb-3 text-gray-300">{{ event.description }}</p>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <p>
+                        <span class="font-semibold">Teléfono:</span><br>
+                        {% if event.phone_number %}
+                            <a href="https://wa.me/{{ event.phone_number|replace(' ', '') }}" target="_blank" class="hover:underline text-4da8da">{{ event.phone_number }}</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                    <p>
+                        <span class="font-semibold">Ubicación:</span><br>
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ event.location|urlencode }}" target="_blank" class="hover:underline text-4da8da">{{ event.location }}</a>
+                    </p>
+                    <p>
+                        <span class="font-semibold">Instagram:</span><br>
+                        {% if event.instagram %}
+                            <a href="https://www.instagram.com/{{ event.instagram.lstrip('@') }}" target="_blank" class="hover:underline text-4da8da">{{ event.instagram }}</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                    {% if event.link %}
+                    <p>
+                        <span class="font-semibold">Enlace:</span><br>
+                        <a href="{{ event.link }}" target="_blank" class="hover:underline text-4da8da">Más información</a>
+                    </p>
                     {% endif %}
-                </p>
-                <p class="mb-2">
-                    Ubicación: 
-                    <a href="https://www.google.com/maps/search/?api=1&query={{ event.location|urlencode }}" target="_blank" class="hover:underline">{{ event.location }}</a>
-                </p>
-                <p class="mb-2">
-                    Instagram: 
-                    {% if event.instagram %}
-                        <a href="https://www.instagram.com/{{ event.instagram.lstrip('@') }}" target="_blank" class="hover:underline">{{ event.instagram }}</a>
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </p>
-                {% if event.link %}
-                <p class="mb-2">
-                    Enlace: <a href="{{ event.link }}" target="_blank" class="hover:underline">{{ event.link }}</a>
-                </p>
-                {% endif %}
+                </div>
             </div>
             {% endfor %}
         </div>

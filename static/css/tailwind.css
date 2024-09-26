@@ -76,3 +76,22 @@ header h1 {
 .brigade-card svg {
     vertical-align: middle;
 }
+
+/* New styles for donation event cards */
+.event-card {
+    background-color: #2a4365;
+    border-left: 4px solid #f9536e;
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-card:hover {
+    transform: scale(1.03);
+}
+
+.text-f9536e {
+    color: #f9536e;
+}
+
+.text-4da8da {
+    color: #4da8da;
+}
