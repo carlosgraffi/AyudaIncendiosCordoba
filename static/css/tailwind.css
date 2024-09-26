@@ -71,3 +71,8 @@ header h1 {
 .copy-alias-btn:hover {
     background-color: #5cb7e7;
 }
+
+/* New style for SVG icon */
+.brigade-card svg {
+    vertical-align: middle;
+}
