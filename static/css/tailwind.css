@@ -16,11 +16,11 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #e94560;
+    color: #f9536e;
 }
 
 a {
-    color: #e94560;
+    color: #f9536e;
 }
 
 a:hover {
@@ -33,7 +33,7 @@ button {
 }
 
 button:hover {
-    background-color: #e94560;
+    background-color: #f9536e;
 }
 
 input[type="text"] {
@@ -55,7 +55,7 @@ input[type="text"] {
 
 /* Header styles */
 header {
-    background-color: #0f3460;
+    background-color: #f9536e;
 }
 
 header h1 {
