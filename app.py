@@ -23,7 +23,8 @@ ADMIN_PASSWORD = 'admin123'
 
 @app.route('/')
 def index():
-    return render_template('index.html', brigades=fire_brigades, donation_events=donation_events)
+    approved_events = [event for event in donation_events if event.get('status') == 'approved']
+    return render_template('index.html', brigades=fire_brigades, donation_events=approved_events)
 
 @app.route('/search')
 def search():
@@ -60,14 +61,62 @@ def submit_event():
             'phone_number': request.form.get('phone_number'),
             'location': request.form.get('location'),
             'instagram': request.form.get('instagram'),
-            'link': request.form.get('link')
+            'link': request.form.get('link'),
+            'status': 'pending'
         }
         donation_events.append(new_event)
         with open(donation_events_file, 'w', encoding='utf-8') as file:
             json.dump(donation_events, file, ensure_ascii=False, indent=4)
-        flash('Donation event submission successful!', 'success')
+        flash('Donation event submission successful! Waiting for admin approval.', 'success')
         return redirect(url_for('index'))
     return render_template('submit_event.html')
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['admin'] = True
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid credentials', 'error')
+    return render_template('admin_login.html')
+
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+    pending_events = [event for event in donation_events if event.get('status') == 'pending']
+    approved_events = [event for event in donation_events if event.get('status') == 'approved']
+    return render_template('admin.html', brigades=fire_brigades, pending_events=pending_events, approved_events=approved_events)
+
+@app.route('/admin/approve_event/<int:event_index>', methods=['POST'])
+def approve_event(event_index):
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+    if 0 <= event_index < len(donation_events):
+        donation_events[event_index]['status'] = 'approved'
+        with open(donation_events_file, 'w', encoding='utf-8') as file:
+            json.dump(donation_events, file, ensure_ascii=False, indent=4)
+        flash('Event approved successfully', 'success')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/reject_event/<int:event_index>', methods=['POST'])
+def reject_event(event_index):
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+    if 0 <= event_index < len(donation_events):
+        donation_events.pop(event_index)
+        with open(donation_events_file, 'w', encoding='utf-8') as file:
+            json.dump(donation_events, file, ensure_ascii=False, indent=4)
+        flash('Event rejected and removed', 'success')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin', None)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
