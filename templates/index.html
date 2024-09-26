@@ -22,10 +22,17 @@
             </div>
             <div class="ml-3">
                 <p class="text-sm">
-                    La información mostrada en esta página ha sido recopilada de la difusión a través de redes sociales, pero vinculada a al menos una forma de contacto para cada brigada. Te recomendamos contactar a cada brigada en caso de que quieras confirmar algún dato de contacto o transferencia.
+                    La información mostrada en esta página ha sido recopilada a través la difusión en redes sociales de las diferentes brigadas. Para tu seguridad incluimos al menos una forma de contacto (teléfono o redes sociales) para cada una. Te recomendamos contactar a cada brigada en caso de que quieras confirmar algún dato de contacto o transferencia. Esta página no tiene ninguna afiliación con las brigadas ni con el Estado de Córdoba y tiene un fin exclusivamente informativo y de concientización.
                 </p>
             </div>
         </div>
+    </div>
+
+    <div class="mb-8 flex justify-between items-center">
+        <h2 class="text-3xl font-bold">Brigadas Voluntarias</h2>
+        <a href="{{ url_for('submit_brigade') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Submit New Brigade
+        </a>
     </div>
 
     <div id="brigades-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -64,44 +71,61 @@
         {% endfor %}
     </div>
 
-    <div class="mt-12">
-        <h2 class="text-3xl font-bold mb-4">Eventos de Donación</h2>
-        <div id="events-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {% for event in donation_events %}
-            <div class="event-card rounded-lg shadow-md p-6 mb-4">
-                <h3 class="text-2xl font-bold mb-3 text-f9536e">{{ event.name }}</h3>
-                <p class="mb-3 text-gray-300">{{ event.description }}</p>
-                <div class="grid grid-cols-2 gap-2 text-sm">
-                    <p>
-                        <span class="font-semibold">Teléfono:</span><br>
-                        {% if event.phone_number %}
-                            <a href="https://wa.me/{{ event.phone_number|replace(' ', '') }}" target="_blank" class="hover:underline text-4da8da">{{ event.phone_number }}</a>
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </p>
-                    <p>
-                        <span class="font-semibold">Ubicación:</span><br>
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ event.location|urlencode }}" target="_blank" class="hover:underline text-4da8da">{{ event.location }}</a>
-                    </p>
-                    <p>
-                        <span class="font-semibold">Instagram:</span><br>
-                        {% if event.instagram %}
-                            <a href="https://www.instagram.com/{{ event.instagram.lstrip('@') }}" target="_blank" class="hover:underline text-4da8da">{{ event.instagram }}</a>
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </p>
-                    {% if event.link %}
-                    <p>
-                        <span class="font-semibold">Enlace:</span><br>
-                        <a href="{{ event.link }}" target="_blank" class="hover:underline text-4da8da">Más información</a>
-                    </p>
+    <div class="mt-12 mb-8 flex justify-between items-center">
+        <h2 class="text-3xl font-bold">Eventos de Donación</h2>
+        <a href="{{ url_for('submit_event') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Submit New Event
+        </a>
+    </div>
+
+    <div id="events-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for event in donation_events %}
+        <div class="event-card rounded-lg shadow-md p-6 mb-4">
+            <h3 class="text-2xl font-bold mb-3 text-f9536e">{{ event.name }}</h3>
+            <p class="mb-3 text-gray-300">{{ event.description }}</p>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+                <p>
+                    <span class="font-semibold">Teléfono:</span><br>
+                    {% if event.phone_number %}
+                        <a href="https://wa.me/{{ event.phone_number|replace(' ', '') }}" target="_blank" class="hover:underline text-4da8da">{{ event.phone_number }}</a>
+                    {% else %}
+                        N/A
                     {% endif %}
-                </div>
+                </p>
+                <p>
+                    <span class="font-semibold">Ubicación:</span><br>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ event.location|urlencode }}" target="_blank" class="hover:underline text-4da8da">{{ event.location }}</a>
+                </p>
+                <p>
+                    <span class="font-semibold">Instagram:</span><br>
+                    {% if event.instagram %}
+                        <a href="https://www.instagram.com/{{ event.instagram.lstrip('@') }}" target="_blank" class="hover:underline text-4da8da">{{ event.instagram }}</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </p>
+                {% if event.link %}
+                <p>
+                    <span class="font-semibold">Enlace:</span><br>
+                    <a href="{{ event.link }}" target="_blank" class="hover:underline text-4da8da">Más información</a>
+                </p>
+                {% endif %}
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="fixed bottom-0 right-0 m-4">
+      {% for category, message in messages %}
+        <div class="bg-{{ category }}-100 border border-{{ category }}-400 text-{{ category }}-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
 {% endblock %}
