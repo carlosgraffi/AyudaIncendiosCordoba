@@ -1,8 +1,10 @@
 import json
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+import os
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 # Load fire brigade data
 with open('fire_brigades_info.json', 'r', encoding='utf-8') as file:
@@ -31,13 +33,22 @@ def admin():
         username = request.form.get('username')
         password = request.form.get('password')
         if username == ADMIN_USERNAME and check_password_hash(ADMIN_PASSWORD, password):
-            return render_template('admin.html', brigades=fire_brigades)
+            session['admin'] = True
+            return redirect(url_for('admin_dashboard'))
         else:
             return "Invalid credentials", 401
     return render_template('admin_login.html')
 
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    if session.get('admin'):
+        return render_template('admin.html', brigades=fire_brigades)
+    return redirect(url_for('admin'))
+
 @app.route('/update_brigade', methods=['POST'])
 def update_brigade():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
     brigade_name = request.form.get('name')
     for brigade in fire_brigades:
         if brigade['Name'] == brigade_name:
@@ -50,10 +61,12 @@ def update_brigade():
     with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
         json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
     
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/add_brigade', methods=['POST'])
 def add_brigade():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
     new_brigade = {
         'Name': request.form.get('name'),
         'Alias': request.form.get('alias'),
@@ -66,10 +79,12 @@ def add_brigade():
     with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
         json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
     
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/delete_brigade', methods=['POST'])
 def delete_brigade():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
     brigade_name = request.form.get('name')
     global fire_brigades
     fire_brigades = [brigade for brigade in fire_brigades if brigade['Name'] != brigade_name]
@@ -77,6 +92,11 @@ def delete_brigade():
     with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
         json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
     
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin', None)
     return redirect(url_for('admin'))
 
 if __name__ == '__main__':
