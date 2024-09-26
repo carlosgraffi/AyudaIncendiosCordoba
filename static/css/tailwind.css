@@ -108,3 +108,14 @@ header h1 {
 .button-container {
     margin-top: auto;
 }
+
+/* New custom classes for disclaimer */
+.custom-disclaimer {
+    background-color: #2a2a3e; /* Slightly brighter than the site background */
+    color: #ffffff;
+    border-left: 4px solid #f9536e;
+}
+
+.custom-disclaimer svg {
+    color: #ffffff;
+}
