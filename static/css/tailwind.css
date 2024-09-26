@@ -47,4 +47,17 @@ input[type="text"] {
     .brigade-card {
         width: 100%;
     }
+
+    h1 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Header styles */
+header {
+    background-color: #0f3460;
+}
+
+header h1 {
+    color: #ffffff;
 }
