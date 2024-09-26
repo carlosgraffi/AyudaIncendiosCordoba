@@ -3,6 +3,8 @@
 {% block content %}
 <div class="container mx-auto px-4">
     <h2 class="text-3xl font-bold mb-4">Submit New Brigade</h2>
+    <!-- Debug output for CSRF token -->
+    <p class="mb-4 text-red-500">Debug - CSRF Token: {{ csrf_token() }}</p>
     <form action="{{ url_for('submit_brigade') }}" method="POST" class="max-w-lg mx-auto">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-4">

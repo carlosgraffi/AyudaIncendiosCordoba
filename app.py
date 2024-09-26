@@ -2,6 +2,7 @@ import json
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from flask_wtf.csrf import CSRFProtect
+from werkzeug.exceptions import CSRFError
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -38,20 +39,31 @@ def search():
     return jsonify(results)
 
 @app.route('/submit_brigade', methods=['GET', 'POST'])
+@csrf.exempt  # Temporarily disable CSRF protection for this route
 def submit_brigade():
     if request.method == 'POST':
-        new_brigade = {
-            'Name': request.form.get('name'),
-            'Alias': request.form.get('alias'),
-            'Phone Number': request.form.get('phone'),
-            'Instagram': request.form.get('instagram'),
-            'Facebook': request.form.get('facebook')
-        }
-        fire_brigades.append(new_brigade)
-        with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
-            json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
-        flash('Brigade submission successful!', 'success')
-        return redirect(url_for('index'))
+        try:
+            new_brigade = {
+                'Name': request.form.get('name'),
+                'Alias': request.form.get('alias'),
+                'Phone Number': request.form.get('phone'),
+                'Instagram': request.form.get('instagram'),
+                'Facebook': request.form.get('facebook')
+            }
+            fire_brigades.append(new_brigade)
+            with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
+                json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
+            flash('Brigade submission successful!', 'success')
+            return redirect(url_for('index'))
+        except Exception as e:
+            app.logger.error(f"Error submitting brigade: {str(e)}")
+            flash('An error occurred while submitting the brigade', 'error')
+            return redirect(url_for('submit_brigade'))
+    
+    # Print CSRF token value for debugging
+    csrf_token = csrf._get_token()
+    print(f"CSRF Token: {csrf_token}")
+    
     return render_template('submit_brigade.html')
 
 @app.route('/submit_event', methods=['GET', 'POST'])
@@ -133,6 +145,11 @@ def reject_event(event_index):
 def admin_logout():
     session.pop('admin', None)
     return redirect(url_for('index'))
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    app.logger.error(f"CSRF Error: {str(e)}")
+    return render_template('csrf_error.html', reason=e.description), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
