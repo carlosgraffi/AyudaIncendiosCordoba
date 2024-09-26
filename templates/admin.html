@@ -19,12 +19,14 @@
         <p class="mb-2">Instagram: {{ event.instagram }}</p>
         <p class="mb-2">Link: {{ event.link }}</p>
         <div class="flex justify-between mt-4">
-            <form action="{{ url_for('approve_event', event_index=loop.index0) }}" method="POST">
+            <form action="{{ url_for('approve_event', event_index=loop.index0) }}" method="POST" class="approve-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Approve
                 </button>
             </form>
-            <form action="{{ url_for('reject_event', event_index=loop.index0) }}" method="POST">
+            <form action="{{ url_for('reject_event', event_index=loop.index0) }}" method="POST" class="reject-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Reject
                 </button>

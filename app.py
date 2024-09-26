@@ -1,9 +1,11 @@
 import json
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+csrf = CSRFProtect(app)
 
 # Load fire brigade data
 with open('fire_brigades_info.json', 'r', encoding='utf-8') as file:
@@ -92,25 +94,39 @@ def admin_dashboard():
     return render_template('admin.html', brigades=fire_brigades, pending_events=pending_events, approved_events=approved_events)
 
 @app.route('/admin/approve_event/<int:event_index>', methods=['POST'])
+@csrf.exempt
 def approve_event(event_index):
     if not session.get('admin'):
         return redirect(url_for('admin'))
-    if 0 <= event_index < len(donation_events):
-        donation_events[event_index]['status'] = 'approved'
-        with open(donation_events_file, 'w', encoding='utf-8') as file:
-            json.dump(donation_events, file, ensure_ascii=False, indent=4)
-        flash('Event approved successfully', 'success')
+    try:
+        if 0 <= event_index < len(donation_events):
+            donation_events[event_index]['status'] = 'approved'
+            with open(donation_events_file, 'w', encoding='utf-8') as file:
+                json.dump(donation_events, file, ensure_ascii=False, indent=4)
+            flash('Event approved successfully', 'success')
+        else:
+            flash('Invalid event index', 'error')
+    except Exception as e:
+        app.logger.error(f"Error approving event: {str(e)}")
+        flash('An error occurred while approving the event', 'error')
     return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/reject_event/<int:event_index>', methods=['POST'])
+@csrf.exempt
 def reject_event(event_index):
     if not session.get('admin'):
         return redirect(url_for('admin'))
-    if 0 <= event_index < len(donation_events):
-        donation_events.pop(event_index)
-        with open(donation_events_file, 'w', encoding='utf-8') as file:
-            json.dump(donation_events, file, ensure_ascii=False, indent=4)
-        flash('Event rejected and removed', 'success')
+    try:
+        if 0 <= event_index < len(donation_events):
+            donation_events.pop(event_index)
+            with open(donation_events_file, 'w', encoding='utf-8') as file:
+                json.dump(donation_events, file, ensure_ascii=False, indent=4)
+            flash('Event rejected and removed', 'success')
+        else:
+            flash('Invalid event index', 'error')
+    except Exception as e:
+        app.logger.error(f"Error rejecting event: {str(e)}")
+        flash('An error occurred while rejecting the event', 'error')
     return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/logout')

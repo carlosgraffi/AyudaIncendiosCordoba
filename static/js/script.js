@@ -71,4 +71,44 @@ document.addEventListener('DOMContentLoaded', () => {
             timeoutId = setTimeout(() => func.apply(this, args), delay);
         };
     }
+
+    // Add event listeners for approve and reject buttons
+    const approveForms = document.querySelectorAll('.approve-form');
+    const rejectForms = document.querySelectorAll('.reject-form');
+
+    approveForms.forEach(form => {
+        form.addEventListener('submit', handleFormSubmit);
+    });
+
+    rejectForms.forEach(form => {
+        form.addEventListener('submit', handleFormSubmit);
+    });
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const url = form.action;
+        const method = form.method;
+
+        fetch(url, {
+            method: method,
+            body: new FormData(form),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
 });

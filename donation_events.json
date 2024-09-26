@@ -1,18 +1,29 @@
 [
     {
-        "name": "Evento de Recaudación para Brigadas",
-        "description": "Únete a nosotros para un evento de recaudación de fondos para apoyar a las brigadas voluntarias de Córdoba.",
-        "phone_number": "351 1234567",
-        "location": "Plaza San Martín, Córdoba",
-        "instagram": "@evento_brigadas",
-        "link": "https://example.com/evento-brigadas"
-    },
-    {
         "name": "TEst",
         "description": "TEst",
         "phone_number": "123",
         "location": "Test",
         "instagram": "@test",
-        "link": ""
+        "link": "",
+        "status": "approved"
+    },
+    {
+        "name": "TEst",
+        "description": "Test",
+        "phone_number": "test",
+        "location": "Test",
+        "instagram": "test",
+        "link": "",
+        "status": "pending"
+    },
+    {
+        "name": "test",
+        "description": "test",
+        "phone_number": "test",
+        "location": "tets",
+        "instagram": "test",
+        "link": "",
+        "status": "pending"
     }
 ]
