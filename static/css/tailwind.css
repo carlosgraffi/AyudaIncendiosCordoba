@@ -1,34 +1,50 @@
 @import 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
 
 /* Custom styles */
+body {
+    background-color: #1a1a2e;
+    color: #ffffff;
+}
+
 .brigade-card {
     transition: transform 0.3s ease-in-out;
+    background-color: #16213e;
 }
 
 .brigade-card:hover {
     transform: scale(1.05);
 }
 
-/* Dark mode styles */
-.dark {
-    @apply bg-gray-900 text-white;
+h1, h2, h3, h4, h5, h6 {
+    color: #e94560;
 }
 
-.dark .brigade-card {
-    @apply bg-gray-800 text-white;
+a {
+    color: #e94560;
 }
 
-.dark input[type="text"] {
-    @apply bg-gray-700 text-white border-gray-600;
+a:hover {
+    text-decoration: underline;
 }
 
-.dark button {
-    @apply bg-blue-600 hover:bg-blue-700;
+button {
+    background-color: #0f3460;
+    color: #ffffff;
+}
+
+button:hover {
+    background-color: #e94560;
+}
+
+input[type="text"] {
+    background-color: #16213e;
+    color: #ffffff;
+    border-color: #0f3460;
 }
 
 /* Responsive styles */
 @media (max-width: 640px) {
     .brigade-card {
-        @apply w-full;
+        width: 100%;
     }
 }

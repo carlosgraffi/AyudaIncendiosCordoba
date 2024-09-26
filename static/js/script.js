@@ -25,23 +25,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createBrigadeCard(brigade) {
         const phoneLink = brigade['Phone Number']
-            ? `<a href="https://wa.me/${brigade['Phone Number'].replace(/\s/g, '')}" target="_blank" class="text-blue-500 hover:underline">${brigade['Phone Number']}</a>`
+            ? `<a href="https://wa.me/${brigade['Phone Number'].replace(/\s/g, '')}" target="_blank" class="hover:underline">${brigade['Phone Number']}</a>`
             : 'N/A';
 
         const instagramLink = brigade.Instagram
-            ? `<a href="https://www.instagram.com/${brigade.Instagram.replace('@', '')}" target="_blank" class="text-blue-500 hover:underline">${brigade.Instagram}</a>`
+            ? `<a href="https://www.instagram.com/${brigade.Instagram.replace('@', '')}" target="_blank" class="hover:underline">${brigade.Instagram}</a>`
             : 'N/A';
 
         return `
-            <div class="brigade-card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-4">
+            <div class="brigade-card rounded-lg shadow-md p-6 mb-4">
                 <h2 class="text-xl font-bold mb-2">${brigade.Name}</h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-2">
+                <p class="mb-2">
                     Alias: ${brigade.Alias || 'N/A'}
                 </p>
-                <p class="text-gray-600 dark:text-gray-400 mb-2">Teléfono: ${phoneLink}</p>
-                <p class="text-gray-600 dark:text-gray-400 mb-2">Instagram: ${instagramLink}</p>
-                <p class="text-gray-600 dark:text-gray-400">Facebook: ${brigade.Facebook || 'N/A'}</p>
-                <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded copy-alias" data-alias="${brigade.Alias || ''}">Copiar Alias</button>
+                <p class="mb-2">Teléfono: ${phoneLink}</p>
+                <p class="mb-2">Instagram: ${instagramLink}</p>
+                <p>Facebook: ${brigade.Facebook || 'N/A'}</p>
+                <button class="mt-4 px-4 py-2 rounded copy-alias" data-alias="${brigade.Alias || ''}">Copiar Alias</button>
             </div>
         `;
     }
