@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="mb-2">Teléfono: ${phoneLink}</p>
                 <p class="mb-2">Instagram: ${instagramLink}</p>
                 <p>Facebook: ${brigade.Facebook || 'N/A'}</p>
-                <button class="mt-4 px-4 py-2 rounded copy-alias copy-alias-btn" data-alias="${brigade.Alias || ''}">Copiar Alias</button>
+                <button class="mt-4 px-4 py-2 rounded copy-alias copy-alias-btn btn-full-width" data-alias="${brigade.Alias || ''}">Copiar Alias</button>
             </div>
         `;
     }

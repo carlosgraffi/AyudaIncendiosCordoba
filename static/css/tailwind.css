@@ -95,3 +95,9 @@ header h1 {
 .text-4da8da {
     color: #4da8da;
 }
+
+/* New class for full-width button */
+.btn-full-width {
+    width: 100%;
+    display: block;
+}
