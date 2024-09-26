@@ -1,25 +1,24 @@
-import os
 import json
-from flask import Flask, render_template, jsonify
-from datetime import datetime
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-def load_brigades():
-    with open('static/data/brigades.json', 'r', encoding='utf-8') as file:
-        return json.load(file)
+# Load fire brigade data
+with open('fire_brigades_info.json', 'r', encoding='utf-8') as file:
+    fire_brigades = json.load(file)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', brigades=fire_brigades)
 
-@app.route('/api/brigades')
-def get_brigades():
-    brigades = load_brigades()
-    for brigade in brigades:
-        # Convert date strings to Argentinian format
-        brigade['fecha_actualizacion'] = datetime.strptime(brigade['fecha_actualizacion'], '%Y-%m-%d').strftime('%d/%m/%Y')
-    return jsonify(brigades)
+@app.route('/search')
+def search():
+    query = request.args.get('query', '').lower()
+    results = [
+        brigade for brigade in fire_brigades
+        if query in brigade['Name'].lower() or query in brigade.get('Alias', '').lower()
+    ]
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

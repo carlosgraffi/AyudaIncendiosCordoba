@@ -1,17 +1,19 @@
-<!DOCTYPE html>
-<html lang="es-AR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brigadas de Bomberos de Córdoba, Argentina</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body class="bg-gray-100 font-sans">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8 text-center text-red-600">Brigadas de Bomberos de Córdoba, Argentina</h1>
-        <div id="brigades-container"></div>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-8">
+    <input type="text" id="search" placeholder="Buscar brigada por nombre o alias" class="w-full p-2 border border-gray-300 rounded">
+</div>
+
+<div id="brigades-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for brigade in brigades %}
+    <div class="brigade-card bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-bold mb-2">{{ brigade.Name }}</h2>
+        <p class="text-gray-600 mb-2">Alias: {{ brigade.Alias or 'N/A' }}</p>
+        <p class="text-gray-600 mb-2">Teléfono: {{ brigade['Phone Number'] or 'N/A' }}</p>
+        <p class="text-gray-600 mb-2">Instagram: {{ brigade.Instagram or 'N/A' }}</p>
+        <p class="text-gray-600">Facebook: {{ brigade.Facebook or 'N/A' }}</p>
     </div>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-</body>
-</html>
+    {% endfor %}
+</div>
+{% endblock %}
