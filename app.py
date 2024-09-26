@@ -68,5 +68,16 @@ def add_brigade():
     
     return redirect(url_for('admin'))
 
+@app.route('/delete_brigade', methods=['POST'])
+def delete_brigade():
+    brigade_name = request.form.get('name')
+    global fire_brigades
+    fire_brigades = [brigade for brigade in fire_brigades if brigade['Name'] != brigade_name]
+    
+    with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
+        json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
+    
+    return redirect(url_for('admin'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
