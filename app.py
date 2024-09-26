@@ -52,5 +52,21 @@ def update_brigade():
     
     return redirect(url_for('admin'))
 
+@app.route('/add_brigade', methods=['POST'])
+def add_brigade():
+    new_brigade = {
+        'Name': request.form.get('name'),
+        'Alias': request.form.get('alias'),
+        'Phone Number': request.form.get('phone'),
+        'Instagram': request.form.get('instagram'),
+        'Facebook': request.form.get('facebook')
+    }
+    fire_brigades.append(new_brigade)
+    
+    with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
+        json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
+    
+    return redirect(url_for('admin'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

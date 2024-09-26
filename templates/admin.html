@@ -3,6 +3,44 @@
 {% block content %}
 <div class="container mx-auto px-4">
     <h2 class="text-2xl font-bold mb-4">Admin Interface - Edit Brigade Information</h2>
+    
+    <button id="toggleAddForm" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">
+        Add New Brigade
+    </button>
+
+    <div id="addBrigadeForm" class="mb-8 bg-white shadow-md rounded-lg p-6" style="display: none;">
+        <h3 class="text-xl font-bold mb-4">Add New Brigade</h3>
+        <form action="{{ url_for('add_brigade') }}" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-name">Name</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-name" name="name" type="text" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-alias">Alias</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-alias" name="alias" type="text">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-phone">Phone Number</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-phone" name="phone" type="text">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-instagram">Instagram</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-instagram" name="instagram" type="text">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-facebook">Facebook</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-facebook" name="facebook" type="text">
+                </div>
+            </div>
+            <div class="mt-4">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Add Brigade
+                </button>
+            </div>
+        </form>
+    </div>
+
     {% for brigade in brigades %}
     <div class="mb-8 bg-white shadow-md rounded-lg p-6">
         <h3 class="text-xl font-bold mb-4">{{ brigade.Name }}</h3>
@@ -35,4 +73,15 @@
     </div>
     {% endfor %}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButton = document.getElementById('toggleAddForm');
+        const addForm = document.getElementById('addBrigadeForm');
+
+        toggleButton.addEventListener('click', () => {
+            addForm.style.display = addForm.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+</script>
 {% endblock %}
