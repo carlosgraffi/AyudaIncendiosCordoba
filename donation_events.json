@@ -4,6 +4,7 @@
     "description": "Únete a nosotros para un evento de recaudación de fondos para apoyar a las brigadas voluntarias de Córdoba.",
     "phone_number": "351 1234567",
     "location": "Plaza San Martín, Córdoba",
-    "instagram": "@evento_brigadas"
+    "instagram": "@evento_brigadas",
+    "link": "https://example.com/evento-brigadas"
   }
 ]

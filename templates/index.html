@@ -62,7 +62,10 @@
                         N/A
                     {% endif %}
                 </p>
-                <p class="mb-2">Ubicación: {{ event.location }}</p>
+                <p class="mb-2">
+                    Ubicación: 
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ event.location|urlencode }}" target="_blank" class="hover:underline">{{ event.location }}</a>
+                </p>
                 <p class="mb-2">
                     Instagram: 
                     {% if event.instagram %}
@@ -71,6 +74,11 @@
                         N/A
                     {% endif %}
                 </p>
+                {% if event.link %}
+                <p class="mb-2">
+                    Enlace: <a href="{{ event.link }}" target="_blank" class="hover:underline">{{ event.link }}</a>
+                </p>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

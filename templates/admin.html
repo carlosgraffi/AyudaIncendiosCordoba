@@ -111,6 +111,10 @@
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-instagram">Instagram</label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-instagram" name="instagram" type="text">
                 </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-link">Link</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-link" name="link" type="url">
+                </div>
             </div>
             <div class="mt-4">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -141,6 +145,10 @@
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="instagram-{{ loop.index }}">Instagram</label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="instagram-{{ loop.index }}" name="instagram" type="text" value="{{ event.instagram }}">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="link-{{ loop.index }}">Link</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="link-{{ loop.index }}" name="link" type="url" value="{{ event.link }}">
                 </div>
             </div>
             <div class="mt-4 flex justify-between">

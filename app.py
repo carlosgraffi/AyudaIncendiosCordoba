@@ -111,7 +111,8 @@ def add_event():
         'description': request.form.get('description'),
         'phone_number': request.form.get('phone_number'),
         'location': request.form.get('location'),
-        'instagram': request.form.get('instagram')
+        'instagram': request.form.get('instagram'),
+        'link': request.form.get('link')
     }
     donation_events.append(new_event)
     
@@ -131,6 +132,7 @@ def update_event():
             event['phone_number'] = request.form.get('phone_number')
             event['location'] = request.form.get('location')
             event['instagram'] = request.form.get('instagram')
+            event['link'] = request.form.get('link')
             break
     
     with open(donation_events_file, 'w', encoding='utf-8') as file:
