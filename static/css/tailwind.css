@@ -10,7 +10,8 @@ body {
 .brigade-card {
     transition: transform 0.3s ease-in-out;
     background-color: #16213e;
-    border-left: 4px solid #4da8da;
+    display: flex;
+    flex-direction: column;
 }
 
 .brigade-card:hover {
@@ -101,4 +102,9 @@ header h1 {
 .btn-full-width {
     width: 100%;
     display: block;
+}
+
+/* New class for button container */
+.button-container {
+    margin-top: auto;
 }
