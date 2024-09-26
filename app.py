@@ -10,13 +10,21 @@ app.secret_key = os.urandom(24)
 with open('fire_brigades_info.json', 'r', encoding='utf-8') as file:
     fire_brigades = json.load(file)
 
+# Load donation events data
+donation_events_file = 'donation_events.json'
+if os.path.exists(donation_events_file):
+    with open(donation_events_file, 'r', encoding='utf-8') as file:
+        donation_events = json.load(file)
+else:
+    donation_events = []
+
 # Admin credentials (in a real application, use a database and proper authentication)
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = generate_password_hash('admin123')
 
 @app.route('/')
 def index():
-    return render_template('index.html', brigades=fire_brigades)
+    return render_template('index.html', brigades=fire_brigades, donation_events=donation_events)
 
 @app.route('/search')
 def search():
@@ -42,7 +50,7 @@ def admin():
 @app.route('/admin/dashboard')
 def admin_dashboard():
     if session.get('admin'):
-        return render_template('admin.html', brigades=fire_brigades)
+        return render_template('admin.html', brigades=fire_brigades, donation_events=donation_events)
     return redirect(url_for('admin'))
 
 @app.route('/update_brigade', methods=['POST'])
@@ -91,6 +99,55 @@ def delete_brigade():
     
     with open('fire_brigades_info.json', 'w', encoding='utf-8') as file:
         json.dump(fire_brigades, file, ensure_ascii=False, indent=4)
+    
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/add_event', methods=['POST'])
+def add_event():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+    new_event = {
+        'name': request.form.get('name'),
+        'description': request.form.get('description'),
+        'phone_number': request.form.get('phone_number'),
+        'location': request.form.get('location'),
+        'instagram': request.form.get('instagram')
+    }
+    donation_events.append(new_event)
+    
+    with open(donation_events_file, 'w', encoding='utf-8') as file:
+        json.dump(donation_events, file, ensure_ascii=False, indent=4)
+    
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/update_event', methods=['POST'])
+def update_event():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+    event_name = request.form.get('name')
+    for event in donation_events:
+        if event['name'] == event_name:
+            event['description'] = request.form.get('description')
+            event['phone_number'] = request.form.get('phone_number')
+            event['location'] = request.form.get('location')
+            event['instagram'] = request.form.get('instagram')
+            break
+    
+    with open(donation_events_file, 'w', encoding='utf-8') as file:
+        json.dump(donation_events, file, ensure_ascii=False, indent=4)
+    
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/delete_event', methods=['POST'])
+def delete_event():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+    event_name = request.form.get('name')
+    global donation_events
+    donation_events = [event for event in donation_events if event['name'] != event_name]
+    
+    with open(donation_events_file, 'w', encoding='utf-8') as file:
+        json.dump(donation_events, file, ensure_ascii=False, indent=4)
     
     return redirect(url_for('admin_dashboard'))
 

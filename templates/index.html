@@ -46,5 +46,34 @@
         </div>
         {% endfor %}
     </div>
+
+    <div class="mt-12">
+        <h2 class="text-3xl font-bold mb-4">Eventos de Donación</h2>
+        <div id="events-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for event in donation_events %}
+            <div class="event-card rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold mb-2">{{ event.name }}</h3>
+                <p class="mb-2">{{ event.description }}</p>
+                <p class="mb-2">
+                    Teléfono: 
+                    {% if event.phone_number %}
+                        <a href="https://wa.me/{{ event.phone_number|replace(' ', '') }}" target="_blank" class="hover:underline">{{ event.phone_number }}</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </p>
+                <p class="mb-2">Ubicación: {{ event.location }}</p>
+                <p class="mb-2">
+                    Instagram: 
+                    {% if event.instagram %}
+                        <a href="https://www.instagram.com/{{ event.instagram.lstrip('@') }}" target="_blank" class="hover:underline">{{ event.instagram }}</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}

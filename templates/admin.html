@@ -80,6 +80,80 @@
         </form>
     </div>
     {% endfor %}
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Manage Donation Events</h2>
+   
+    <button id="toggleAddEventForm" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">
+        Add New Event
+    </button>
+
+    <div id="addEventForm" class="mb-8 bg-white shadow-md rounded-lg p-6" style="display: none;">
+        <h3 class="text-xl font-bold mb-4">Add New Event</h3>
+        <form action="{{ url_for('add_event') }}" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-name">Name</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-name" name="name" type="text" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-description">Description</label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-description" name="description" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-phone">Phone Number</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-phone" name="phone_number" type="text">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-location">Location</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-location" name="location" type="text" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="new-event-instagram">Instagram</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-event-instagram" name="instagram" type="text">
+                </div>
+            </div>
+            <div class="mt-4">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Add Event
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% for event in donation_events %}
+    <div class="mb-8 bg-white shadow-md rounded-lg p-6">
+        <h3 class="text-xl font-bold mb-4">{{ event.name }}</h3>
+        <form action="{{ url_for('update_event') }}" method="POST">
+            <input type="hidden" name="name" value="{{ event.name }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="description-{{ loop.index }}">Description</label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description-{{ loop.index }}" name="description">{{ event.description }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="phone-{{ loop.index }}">Phone Number</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone-{{ loop.index }}" name="phone_number" type="text" value="{{ event.phone_number }}">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="location-{{ loop.index }}">Location</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="location-{{ loop.index }}" name="location" type="text" value="{{ event.location }}">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="instagram-{{ loop.index }}">Instagram</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="instagram-{{ loop.index }}" name="instagram" type="text" value="{{ event.instagram }}">
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Update
+                </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline delete-event" type="button" data-name="{{ event.name }}">
+                    Delete
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endfor %}
 </div>
 
 <script>
@@ -91,8 +165,8 @@
             addForm.style.display = addForm.style.display === 'none' ? 'block' : 'none';
         });
 
-        const deleteButtons = document.querySelectorAll('.delete-brigade');
-        deleteButtons.forEach(button => {
+        const deleteBrigadeButtons = document.querySelectorAll('.delete-brigade');
+        deleteBrigadeButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 const brigadeName = e.target.getAttribute('data-name');
                 if (confirm(`Are you sure you want to delete the brigade "${brigadeName}"?`)) {
@@ -103,6 +177,34 @@
                     input.type = 'hidden';
                     input.name = 'name';
                     input.value = brigadeName;
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+
+        const toggleAddEventButton = document.getElementById('toggleAddEventForm');
+        const addEventForm = document.getElementById('addEventForm');
+
+        if (toggleAddEventButton && addEventForm) {
+            toggleAddEventButton.addEventListener('click', () => {
+                addEventForm.style.display = addEventForm.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+
+        const deleteEventButtons = document.querySelectorAll('.delete-event');
+        deleteEventButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const eventName = e.target.getAttribute('data-name');
+                if (confirm(`Are you sure you want to delete the event "${eventName}"?`)) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ url_for("delete_event") }}';
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'name';
+                    input.value = eventName;
                     form.appendChild(input);
                     document.body.appendChild(form);
                     form.submit();
