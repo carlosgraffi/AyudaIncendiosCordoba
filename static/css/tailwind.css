@@ -62,3 +62,12 @@ header {
 header h1 {
     color: #ffffff;
 }
+
+/* New styles for Copiar Alias button */
+.copy-alias-btn {
+    background-color: #4da8da;
+}
+
+.copy-alias-btn:hover {
+    background-color: #5cb7e7;
+}
