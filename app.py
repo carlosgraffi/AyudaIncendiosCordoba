@@ -2,7 +2,6 @@ import json
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from flask_wtf.csrf import CSRFProtect
-from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)

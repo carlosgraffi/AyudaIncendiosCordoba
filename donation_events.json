@@ -1,29 +1,20 @@
 [
     {
-        "name": "TEst",
-        "description": "TEst",
-        "phone_number": "123",
-        "location": "Test",
-        "instagram": "@test",
-        "link": "",
+        "name": "Campaña UNC FCM",
+        "description": "La Facultad de Ciencias Médicas organiza una colecta solidaria para ayudar a damnificados por los incendios.",
+        "phone_number": null,
+        "location": "Secretaría de Extensión, Maternidad y Clínicas (Bv. de la Reforma S/N, entre Pabellón Perú y la escuela de nutrición)",
+        "instagram": null,
+        "link": "https://www.lavoz.com.ar/ciudadanos/esta-si-es-seria-la-campana-de-donacion-de-la-unc-para-damnificados-por-los-incendios/",
         "status": "approved"
     },
     {
-        "name": "TEst",
-        "description": "Test",
-        "phone_number": "test",
-        "location": "Test",
-        "instagram": "test",
-        "link": "",
-        "status": "pending"
-    },
-    {
-        "name": "test",
-        "description": "test",
-        "phone_number": "test",
-        "location": "tets",
-        "instagram": "test",
-        "link": "",
-        "status": "pending"
+        "name": "Cáritas Argentina",
+        "description": "Cáritas Argentina concentra sus esfuerzos en colaborar con los afectados por los incendios en Córdoba.",
+        "phone_number": null,
+        "location": "Av. Vélez Sarsfield 929, Córdoba, Córdoba, Argentina",
+        "instagram": null,
+        "link": "http://caritas.org.ar/emergencia",
+        "status": "approved"
     }
 ]
